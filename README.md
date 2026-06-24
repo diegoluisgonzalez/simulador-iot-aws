@@ -1,79 +1,143 @@
-# simulador-iot-aws
-Proyecto de simulación de un sistema de invernadero inteligente utilizando Python y AWS IoT Core. El dispositivo simulado envía datos en tiempo real de temperatura y humedad a la nube mediante conexión MQTT segura con certificados X.509.
+# 🌱 IoT Smart Greenhouse System (AWS + Streamlit + MQTT)
 
-:::writing{"variant":"document","id":"48291"}
-🌱 Simulador IoT con AWS IoT Core (Python + MQTT)
-📌 Descripción del proyecto
+## 📌 Descripción del Proyecto
 
-Este proyecto simula un dispositivo IoT de invernadero que envía datos en tiempo real a AWS IoT Core utilizando el protocolo MQTT sobre TLS.
-El sistema genera métricas de temperatura y humedad y las publica de forma continua hacia la nube para su procesamiento.
+Este proyecto implementa un sistema de **IoT simulado en tiempo real** para monitoreo de un invernadero inteligente, utilizando servicios de AWS y una arquitectura orientada a eventos.
 
-El objetivo es demostrar una arquitectura básica de IoT en la nube con AWS, simulando un caso real de monitoreo agrícola inteligente.
+Los dispositivos IoT envían datos de sensores (temperatura y humedad) a la nube, donde son procesados, almacenados y visualizados en un dashboard en tiempo real.
 
-🏗️ Arquitectura del sistema (nivel cloud)
-Dispositivo IoT (Python)
-        ↓ MQTT (TLS)
+---
+
+## 🏗️ Arquitectura del Sistema
+
+El flujo de datos del sistema es el siguiente:
+
+```
+Dispositivo IoT (Simulador Python)
+        ↓ MQTT
 AWS IoT Core
-        ↓ Rules Engine
-Servicios AWS opcionales:
-   ├── AWS Lambda (procesamiento)
-   ├── Amazon DynamoDB (almacenamiento)
-   ├── Amazon CloudWatch (monitoreo)
-   └── Amazon S3 (data histórica)
-⚙️ Tecnologías utilizadas
-Python 3
-AWS IoT Core
-MQTT Protocol
-AWSIoTPythonSDK
-TLS X.509 Certificates
-Random (simulación de sensores)
-📡 Funcionamiento
+        ↓ IoT Rule
+AWS Lambda
+        ↓
+Amazon DynamoDB
+        ↓
+EC2 (Streamlit Dashboard)
+        ↓
+Visualización en tiempo real
+```
 
-El script:
+---
 
-Simula un dispositivo IoT llamado Invernadero_01
-Genera datos aleatorios de:
-🌡️ Temperatura (20°C - 30°C)
-💧 Humedad (40% - 80%)
-Se conecta de forma segura a AWS IoT Core usando certificados X.509
-Publica mensajes MQTT cada 5 segundos al topic:
-sdk/test/python
-🔐 Seguridad
+## ⚙️ Tecnologías Utilizadas
 
-La conexión se realiza mediante:
+* 🟡 AWS IoT Core (mensajería MQTT)
+* ⚡ AWS Lambda (procesamiento serverless)
+* 🗄 Amazon DynamoDB (base de datos NoSQL)
+* 🖥 Amazon EC2 (hosting del dashboard)
+* 📊 Streamlit (visualización de datos)
+* 🐍 Python 3
+* 🔐 AWS IAM Roles y Policies
 
-Certificado del dispositivo (.cert.pem)
-Clave privada (.private.key)
-Amazon Root CA
-Comunicación TLS (puerto 8883)
+---
 
-⚠️ Las credenciales NO deben subirse a GitHub (protegidas con .gitignore).
+## 📡 Funcionamiento del Sistema
 
-🚀 Ejecución del proyecto
-pip install AWSIoTPythonSDK
+1. El simulador IoT genera datos de sensores (temperatura y humedad).
+2. Los datos se publican en AWS IoT Core mediante MQTT.
+3. Una regla de IoT activa una función Lambda.
+4. Lambda procesa y guarda los datos en DynamoDB.
+5. El dashboard en EC2 consulta DynamoDB en tiempo real.
+6. Streamlit muestra métricas y tabla actualizada cada pocos segundos.
+
+---
+
+## 📊 Dashboard
+
+El dashboard muestra:
+
+* 🌡 Temperatura en tiempo real
+* 💧 Humedad del ambiente
+* 📡 ID del dispositivo
+* 📊 Tabla de datos históricos recientes
+
+---
+
+## 🚀 Cómo ejecutar el proyecto
+
+### 1. Clonar repositorio
+
+```bash
+git clone https://github.com/usuario/simulador-iot-aws.git
+cd simulador-iot-aws
+```
+
+---
+
+### 2. Instalar dependencias
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+### 3. Ejecutar simulador IoT
+
+```bash
 python simulador_iot.py
-📊 Ejemplo de payload
-{
-  "dispositivo": "Invernadero_01",
-  "temperatura": 24.58,
-  "humedad": 62.31
-}
-🎯 Casos de uso
-Monitoreo de invernaderos inteligentes
-Sistemas de agricultura IoT
-Simulación de dispositivos conectados a AWS
-Pruebas de arquitectura cloud IoT
-💡 Mejoras futuras
-Integración con AWS Lambda
-Almacenamiento en DynamoDB
-Dashboard en tiempo real (AWS QuickSight o Grafana)
-Alertas con Amazon SNS
-Uso de sensores reales (ESP32 / Raspberry Pi)
-👨‍💻 Autor
+```
 
-Diego Luis González
-Proyecto personal – IoT + AWS Cloud Engineering
+---
 
-📌 Nota
+### 4. Ejecutar dashboard
 
-Este proyecto es una simulación educativa de arquitectura IoT en AWS, enfocado en aprendizaje de servicios cloud, MQTT y comunicación segura con dispositivos.
+```bash
+streamlit run dashboard_realtime.py --server.port 8501 --server.address 0.0.0.0
+```
+
+---
+
+## ☁️ Arquitectura en la nube
+
+Este proyecto demuestra habilidades en:
+
+* Arquitecturas serverless en AWS
+* Integración IoT con MQTT
+* Procesamiento de eventos en tiempo real
+* Bases de datos NoSQL escalables
+* Despliegue de aplicaciones en EC2
+
+---
+
+## 🔐 Seguridad
+
+* Uso de IAM Roles para acceso a DynamoDB
+* Comunicación segura mediante MQTT con AWS IoT Core
+* Separación de responsabilidades entre servicios
+
+---
+
+## 📈 Posibles mejoras
+
+* Alertas en tiempo real con Amazon SNS
+* Visualización avanzada con Grafana
+* Autenticación en dashboard
+* Escalamiento con AWS Greengrass
+
+---
+
+## 👨‍💻 Autor
+Autor: Diego González - Electronic Engineer | IoT & Cloud Developer
+
+Proyecto desarrollado como parte de formación en:
+
+* IoT
+* Cloud Computing (AWS)
+* Desarrollo backend en Python
+
+---
+
+## ⭐ Resultado
+
+Este sistema demuestra una arquitectura IoT completa en la nube, desde la generación de datos hasta la visualización en tiempo real, simulando un caso real de industria agrícola inteligente.
+
